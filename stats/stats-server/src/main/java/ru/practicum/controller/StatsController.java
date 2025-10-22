@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStatsDto;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.service.StatsService;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,11 @@ public class StatsController {
             @RequestParam(defaultValue = "false") Boolean unique) {
 
         log.info("GET /stats?start={}&end={}&uris={}&unique={}", start, end, uris, unique);
+
+        if (!start.isBefore(end)) {
+            throw new ValidationException("Параметр 'start' должен быть раньше 'end'");
+        }
+
         return statsService.getStats(start, end, uris, unique);
     }
 }
