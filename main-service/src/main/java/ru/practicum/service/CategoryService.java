@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CategoryService {
     // Создание новой категории
-    CategoryDto createCategory(CategoryDto CategoryDto);
+    CategoryDto createCategory(CategoryDto categoryDto);
 
     // Удаление категории по идентификатору
     void deleteCategory(Long catId);
