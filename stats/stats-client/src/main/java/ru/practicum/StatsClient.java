@@ -5,8 +5,6 @@ import org.springframework.http.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -48,34 +46,24 @@ public class StatsClient {
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        String encodedStart = URLEncoder.encode(start.format(formatter), StandardCharsets.UTF_8);
-        String encodedEnd = URLEncoder.encode(end.format(formatter), StandardCharsets.UTF_8);
-
-        StringBuilder urlBuilder = new StringBuilder(serverUrl + "/stats?start={start}&end={end}");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("start", encodedStart);
-        params.put("end", encodedEnd);
+        String url = serverUrl + "/stats?start={start}&end={end}";
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", start.format(formatter));
+        params.put("end", end.format(formatter));
 
         if (uris != null && !uris.isEmpty()) {
-            urlBuilder.append("&uris={uris}");
+            url += "&uris={uris}";
             params.put("uris", String.join(",", uris));
         }
 
         if (unique != null) {
-            urlBuilder.append("&unique={unique}");
-            params.put("unique", unique.toString());
+            url += "&unique={unique}";
+            params.put("unique", unique);
         }
 
         try {
-            ResponseEntity<ViewStatsDto[]> response = restTemplate.getForEntity(
-                    urlBuilder.toString(),
-                    ViewStatsDto[].class,
-                    params
-            );
-
-            log.info("Успешно получена статистика из сервиса статистики. Количество записей: {}",
-                    response.getBody() != null ? response.getBody().length : 0);
+            ResponseEntity<ViewStatsDto[]> response =
+                    restTemplate.getForEntity(url, ViewStatsDto[].class, params);
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 return Arrays.asList(response.getBody());
