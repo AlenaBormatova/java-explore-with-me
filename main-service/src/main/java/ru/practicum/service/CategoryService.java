@@ -9,14 +9,14 @@ public interface CategoryService {
     CategoryDto createCategory(CategoryDto categoryDto);
 
     // Удаление категории по идентификатору
-    void deleteCategory(Long catId);
+    void deleteCategory(Long categoryId);
 
     // Обновление категории по идентификатору
-    CategoryDto updateCategory(Long catId, CategoryDto categoryDto);
+    CategoryDto updateCategory(Long categoryId, CategoryDto categoryDto);
 
     // Получение списка категорий
     List<CategoryDto> getCategories(int from, int size);
 
     // Получение категории по идентификатору
-    CategoryDto getCategory(Long catId);
+    CategoryDto getCategory(Long categoryId);
 }

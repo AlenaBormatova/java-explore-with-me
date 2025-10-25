@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.request.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.ParticipationRequestDto;
+import ru.practicum.dto.request.RequestUpdateStatus;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
@@ -166,7 +167,7 @@ public class RequestServiceImpl implements RequestService {
 
         EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult();
 
-        if ("CONFIRMED".equals(updateRequest.getStatus())) {
+        if (updateRequest.getStatus() == RequestUpdateStatus.CONFIRMED) {
             // Подтверждение заявок
             Long confirmedCount = requestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED);
             int availableSlots = event.getParticipantLimit() - confirmedCount.intValue();
@@ -193,7 +194,7 @@ public class RequestServiceImpl implements RequestService {
 
             eventRepository.save(event);
 
-        } else if ("REJECTED".equals(updateRequest.getStatus())) {
+        } else if (updateRequest.getStatus() == RequestUpdateStatus.REJECTED) {
             // Отклонение заявок
             for (ParticipationRequest request : requests) {
                 request.setStatus(RequestStatus.REJECTED);

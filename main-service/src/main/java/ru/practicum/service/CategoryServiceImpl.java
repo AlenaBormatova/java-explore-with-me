@@ -45,11 +45,11 @@ public class CategoryServiceImpl implements CategoryService {
     // Удаление категории по идентификатору
     @Override
     @Transactional
-    public void deleteCategory(Long catId) {
-        Category category = categoryRepository.findById(catId)
-                .orElseThrow(() -> new NotFoundException("Категория с id=" + catId + " не найдена"));
+    public void deleteCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Категория с id=" + categoryId + " не найдена"));
 
-        if (!eventRepository.findByCategoryId(catId).isEmpty()) {
+        if (!eventRepository.findByCategoryId(categoryId).isEmpty()) {
             throw new ConflictException("Категория не пуста");
         }
 
@@ -59,9 +59,9 @@ public class CategoryServiceImpl implements CategoryService {
     // Обновление категории по идентификатору
     @Override
     @Transactional
-    public CategoryDto updateCategory(Long catId, CategoryDto categoryDto) {
-        Category category = categoryRepository.findById(catId)
-                .orElseThrow(() -> new NotFoundException("Категория с id=" + catId + " не найдена"));
+    public CategoryDto updateCategory(Long categoryId, CategoryDto categoryDto) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Категория с id=" + categoryId + " не найдена"));
 
         // Если имя не изменилось, просто вернем текущую категорию
         if (categoryDto.getName() != null && categoryDto.getName().equals(category.getName())) {
@@ -71,7 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
         // Если имя изменилось, проверяем уникальность
         if (categoryDto.getName() != null &&
                 !categoryDto.getName().equals(category.getName()) &&
-                categoryRepository.existsByNameAndIdNot(categoryDto.getName(), catId)) {
+                categoryRepository.existsByNameAndIdNot(categoryDto.getName(), categoryId)) {
             throw new ConflictException("Категория с таким названием уже существует");
         }
 
@@ -99,9 +99,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     // Получение категории по идентификатору
     @Override
-    public CategoryDto getCategory(Long catId) {
-        Category category = categoryRepository.findById(catId)
-                .orElseThrow(() -> new NotFoundException("Категория с id=" + catId + " не найдена"));
+    public CategoryDto getCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Категория с id=" + categoryId + " не найдена"));
         return CategoryMapper.toDto(category);
     }
 }
