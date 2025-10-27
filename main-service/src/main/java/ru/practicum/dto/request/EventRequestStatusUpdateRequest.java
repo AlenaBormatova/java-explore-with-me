@@ -13,5 +13,5 @@ import java.util.List;
 @AllArgsConstructor
 public class EventRequestStatusUpdateRequest {
     private List<Long> requestIds;
-    private String status; // CONFIRMED, REJECTED
+    private RequestUpdateStatus status;
 }

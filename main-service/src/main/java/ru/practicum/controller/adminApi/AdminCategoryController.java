@@ -21,15 +21,15 @@ public class AdminCategoryController {
         return categoryService.createCategory(categoryDto);
     }
 
-    @DeleteMapping("/{catId}")
+    @DeleteMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable Long catId) {
-        categoryService.deleteCategory(catId);
+    public void deleteCategory(@PathVariable Long categoryId) {
+        categoryService.deleteCategory(categoryId);
     }
 
-    @PatchMapping("/{catId}")
-    public CategoryDto updateCategory(@PathVariable Long catId,
+    @PatchMapping("/{categoryId}")
+    public CategoryDto updateCategory(@PathVariable Long categoryId,
                                       @Valid @RequestBody CategoryDto categoryDto) {
-        return categoryService.updateCategory(catId, categoryDto);
+        return categoryService.updateCategory(categoryId, categoryDto);
     }
 }
